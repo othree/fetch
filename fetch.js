@@ -24,6 +24,34 @@
     return value
   }
 
+  // simple polyfill string.trim
+  var trim
+  if (''.trim) {
+    trim = function (str) {
+      return str.trim()
+    }
+  } else {
+    trim = function (str) {
+      return str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')
+    }
+  }
+
+  // simple polyfill array.forEach
+  var forEach
+  if ([].forEach) {
+    forEach = function (obj, func) {
+      return obj.forEach(func)
+    }
+  } else {
+    forEach = function (obj, func) {
+      for (var prop in obj) {
+        if (Object.hasOwnProperty.call(obj, prop)) {
+          func.call(obj, obj[prop])
+        }
+      }
+    }
+  }
+
   function Headers(headers) {
     this.map = {}
 
@@ -33,9 +61,11 @@
       }, this)
 
     } else if (headers) {
-      Object.getOwnPropertyNames(headers).forEach(function(name) {
-        this.append(name, headers[name])
-      }, this)
+      for (var name in headers) {
+        if (Object.hasOwnProperty.call(headers, name)) {
+          this.append(name, headers[name])
+        }
+      }
     }
   }
 
@@ -72,11 +102,11 @@
   }
 
   Headers.prototype.forEach = function(callback, thisArg) {
-    Object.getOwnPropertyNames(this.map).forEach(function(name) {
-      this.map[name].forEach(function(value) {
-        callback.call(thisArg, value, name, this)
-      }, this)
-    }, this)
+    for (var name in this.map) {
+      if (Object.hasOwnProperty.call(this.map, name)) {
+          callback.call(thisArg, this.map[name], name, this)
+      }
+    }
   }
 
   function consumed(body) {
@@ -209,7 +239,12 @@
 
   function normalizeMethod(method) {
     var upcased = method.toUpperCase()
-    return (methods.indexOf(upcased) > -1) ? upcased : method
+    for (var i in methods) {
+      if (methods[i] === upcased) {
+        return upcased;
+      }
+    }
+    return method;
   }
 
   function Request(input, options) {
@@ -254,7 +289,7 @@
 
   function decode(body) {
     var form = new FormData()
-    body.trim().split('&').forEach(function(bytes) {
+    forEach(trim(body).split('&'), function(bytes) {
       if (bytes) {
         var split = bytes.split('=')
         var name = split.shift().replace(/\+/g, ' ')
@@ -267,11 +302,11 @@
 
   function headers(xhr) {
     var head = new Headers()
-    var pairs = xhr.getAllResponseHeaders().trim().split('\n')
-    pairs.forEach(function(header) {
-      var split = header.trim().split(':')
-      var key = split.shift().trim()
-      var value = split.join(':').trim()
+    var pairs = trim(xhr.getAllResponseHeaders()).split('\n')
+    forEach(pairs, function(header) {
+      var split = trim(header).split(':')
+      var key = trim(split.shift())
+      var value = trim(split.join(':'))
       head.append(key, value)
     })
     return head

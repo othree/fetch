@@ -1,6 +1,8 @@
 # window.fetch polyfill
 
-**This fork supports IE8 with es5-shim, es5-sham and es6-promise.**
+**This fork supports IE8 with [es6-promise][], not require es5-shim and es5-sham.**
+
+[es6-promise]:https://www.npmjs.com/package/es6-promise
 
 **If you also use JSONP, checkout [fetch-jsonp](https://github.com/camsong/fetch-jsonp).**
 

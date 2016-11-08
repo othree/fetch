@@ -1,8 +1,8 @@
 {
-  "name": "fetch-ie8",
+  "name": "simple-fetch-ie8",
   "version": "1.4.1",
   "main": "fetch.js",
-  "repository": "camsong/fetch",
+  "repository": "othree/fetch",
   "license": "MIT",
   "devDependencies": {
     "browserify": "^9.0.8",

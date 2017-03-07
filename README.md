@@ -17,7 +17,7 @@ possible to the standard Fetch specification at https://fetch.spec.whatwg.org.
 ## Installation
 
 ```sh
-$ npm install fetch-ie8 --save
+$ npm install simple-fetch-ie8 --save
 ```
 
 You'll also need a Promise polyfill for older browsers.

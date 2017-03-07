@@ -1,6 +1,6 @@
 {
   "name": "simple-fetch-ie8",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "main": "fetch.js",
   "repository": "othree/fetch",
   "license": "MIT",
